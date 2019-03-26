@@ -26,6 +26,21 @@ Full MITM beetween a PS2 keyboard and a PS2 computer. The goal of this projet is
 ![shematics](media/key_schem.png)
 
 
+
+## Edit
+
+For the project to work you have to edit the PS2Dev Library
+`Arduino\libraries\ps2dev\src\ps2dev.cpp`
+```c
+int PS2dev::keyboard_mkbrk(unsigned char code)
+{
+  write(code);
+//  write(0xF0);
+//  write(code);
+  return 0;
+}
+```
+
 ## Disclamer
 
 All information and software available on this repository are for educational purposes only. Use these at your own discretion, we cannot be held responsible for any damages caused. Usage of this tools on this repository for attacking targets without prior mutual consent is illegal. It is yours responsibility to obey all applicable laws. We assume no liability and are not responsible for any misuse or damage caused.
