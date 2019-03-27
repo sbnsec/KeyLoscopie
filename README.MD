@@ -48,3 +48,7 @@ All information and software available on this repository are for educational pu
 ## Contributor
 
 [@torreantoine](https://github.com/torreantoine/) [@CustomBread](https://github.com/CustomBread/)
+
+## Special thanks
+
+[@Harvi](https://github.com/Harvie/) and [@SteveBenz](https://github.com/SteveBenz) for the amazing libs.
