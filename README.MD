@@ -5,13 +5,6 @@ Full MITM beetween a PS2 keyboard and a PS2 computer. The goal of this projet is
 ![shematics](media/keyboard.jpeg)
 
 
-
-+ The keyboard is connected to the Teensy on `CLK Keyboard` and `DATA Keyboard`
-+ The computer is connected to the Teensy on port 8 and 5 of the teensy
-- When a keypress is deteced from the keyboard
- * The scancode is sent to keyboard
- + The scancode is decoded to QWTERTY and sent using radio
-
 + The keyboard is connected to the Teensy on `CLK Keyboard` and `DATA Keyboard
 + The computer is connected to the Teensy on port 8 and 5 of the teensy
 + When a keypress is deteced from the keyboard:
