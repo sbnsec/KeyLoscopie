@@ -6,12 +6,22 @@ Full MITM beetween a PS2 keyboard and a PS2 computer. The goal of this projet is
 
 
 
-- The keyboard is connected to the Teensy on `CLK Keyboard` and `DATA Keyboard`
-- The computer is connected to the Teensy on port 8 and 5 of the teensy
++ The keyboard is connected to the Teensy on `CLK Keyboard` and `DATA Keyboard`
++ The computer is connected to the Teensy on port 8 and 5 of the teensy
 - When a keypress is deteced from the keyboard
- - The scancode is sent to keyboard
- - The scancode is decoded to QWTERTY and sent using radio
+ * The scancode is sent to keyboard
+ + The scancode is decoded to QWTERTY and sent using radio
 
++ The keyboard is connected to the Teensy on `CLK Keyboard` and `DATA Keyboard
++ The computer is connected to the Teensy on port 8 and 5 of the teensy
++ When a keypress is deteced from the keyboard:
+  - The scancode is sent to keyboard
+  - The scancode is decoded to QWTERTY and sent using radio
+  - If the ketpress is Majlock or Numlock
+    * The coresponding led is turn on
+
+Please note than the led is not controled using the ketboard library, and it not syncronized with the real state on the computer.
+Usaly the computer send a code informing the ketboard of the leds state. In our case the full mitm block tha signal and the ketboard dont know about the state on Maj and Num leds. So by detecting when the num lock and caps lock are sent to the computer we trick the user by turning on or off the leds. Quick and dirty
 
 ## Requirement
 
@@ -40,6 +50,9 @@ int PS2dev::keyboard_mkbrk(unsigned char code)
   return 0;
 }
 ```
+## Contribute 
+
+Don't hesitate to praticipate and reuse this code.
 
 ## Disclamer
 
