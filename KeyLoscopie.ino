@@ -13,8 +13,11 @@ static ps2::KeyboardLeds lastLedSent = ps2::KeyboardLeds::none;
 static char get_iso8859_code(uint8_t s);
 PS2dev keyboardw(3, 2);
 RH_ASK rf_driver;
-int VerrLedPin = 21;
-int MajPin = 22;  
+//For reception TODO
+//RH_ASK RECEP_driver(2000, 4, 5, 0);
+
+int VerrLedPin = 19;
+int MajPin = 18;  
 char buf;
 String buff;
 unsigned char leds;
@@ -23,12 +26,17 @@ boolean nl= false;
 int ccl = 0;
 int cnl = 0;
 
+uint8_t bufINJ[RH_ASK_MAX_MESSAGE_LEN];
+uint8_t bufINJlen = sizeof(bufINJ);
+
 void setup() {
   pinMode(VerrLedPin, OUTPUT);
   pinMode(MajPin, OUTPUT);
   keyboardw.keyboard_init();
   ps2Keyboard.begin();
   rf_driver.init();
+  Serial.begin(9600);
+  //RECEP_driver.init();
   //keyMapping.setNumLock(true);
   ps2Keyboard.awaitStartup();
   //lastLedSent = ps2::KeyboardLeds::numLock;
@@ -50,6 +58,16 @@ void sendCustom(String str) {
 }
 
 void loop() {
+  if (rf_driver.recv(bufINJ, &bufINJlen)) // Non-blocking
+  {
+    Serial.print((char *)&bufINJ);
+    for(int i = 0; i < bufINJlen; i++){
+      keyboardw.write(bufINJ[i]);
+      keyboardw.write('Z');
+      }
+      
+    rf_driver.printBuffer("Got:", bufINJ, bufINJlen);
+  }
   if(keyboardw.keyboard_handle(&leds)) {
     
   }
