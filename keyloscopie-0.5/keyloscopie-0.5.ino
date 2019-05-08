@@ -24,8 +24,7 @@ boolean nl= false;
 int ccl = 0;
 int cnl = 0;
 
-uint8_t bufINJ[RH_ASK_MAX_MESSAGE_LEN];
-uint8_t bufINJlen = sizeof(bufINJ);
+
 
 void setup() {
   pinMode(VerrLedPin, OUTPUT);
@@ -53,14 +52,16 @@ void sendCustom(String str) {
 }
 
 void loop() {
+  uint8_t bufINJ[RH_ASK_MAX_MESSAGE_LEN];
+  uint8_t bufINJlen = sizeof(bufINJ);
   if (rf_driver.recv(bufINJ, &bufINJlen)) // Non-blocking
   {
-    Serial.print((char *)&bufINJ);
     for(int i = 0; i < bufINJlen; i++){
-      keyboardw.write(bufINJ[i]);
-      keyboardw.write(0xF0);
-      keyboardw.write(bufINJ[i]);
-      }
+      if (bufINJ[0] == '\xE0' && bufINJ[1] == '\x1F')
+        keyboardw.write((byte)bufINJ[i]);
+      else
+        keyboardw.keyboard_mkbrk((byte)bufINJ[i]);
+     }
       
     rf_driver.printBuffer("Got:", bufINJ, bufINJlen);
   }
@@ -81,6 +82,7 @@ void loop() {
       if (buff.length() >= 10)
         sendCustom(buff);
     } else if (scanCode == ps2::KeyboardOutput::sc2_enter) {
+      buff+= "\n";
       sendCustom(buff);
     } else if (scanCode == ps2::KeyboardOutput::sc2ex_rightAlt) {
       buff += "[A]";
