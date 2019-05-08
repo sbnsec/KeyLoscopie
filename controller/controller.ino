@@ -24,6 +24,7 @@ char* strToChar(String s) {
 }
 
 void sendCustom(String str) {
+//  Serial.print(str.lenght());
   char *msg = strToChar(str);
   driver.send((uint8_t *)msg, strlen(msg));
   driver.waitPacketSent();
@@ -134,25 +135,36 @@ char getScancode(char c) {
 
 void loop()
 {
-    uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
-    uint8_t buflen = sizeof(buf);
-    int nbBytes = 0;
 
+    int nbBytes = 0;
+    String message="";
+    char m;
     if ((nbBytes = Serial.available()) > 0) {
             // read the incoming byte:
-            for (int i = 0; i < nbBytes; i++)
-              incomingByte += getScancode((char)Serial.read());
-
-            // say what you got:
-            Serial.print("Sent : ");
-            Serial.println(incomingByte);
+            for (int i = 0; i < (nbBytes); i++){
+              m=(char)Serial.read();
+              message+=m;
+              incomingByte += getScancode(m);
+            }
+      
+            Serial.print(message);
+            if(message.equals("win\n")){
+              sendCustom("\xE0\x1F\xE0\xF0\x1F");
+              Serial.print('enter');
+              }else
             sendCustom(incomingByte);
             
     }
-
+    
+    uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
+    uint8_t buflen = sizeof(buf);
+    
     if (driver.recv(buf, &buflen)) // Non-blocking
     {
+      buf[buflen]='\0';
 	    // Message with a good checksum received, dump it.
-	    driver.printBuffer("Got:", buf, buflen);
+       Serial.print((char*)buf);
+    // Serial.println((char*)buf); 
+	   // driver.printBuffer("Got:", buf, buflen);
     }
 }
