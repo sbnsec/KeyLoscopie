@@ -13,8 +13,6 @@ static ps2::KeyboardLeds lastLedSent = ps2::KeyboardLeds::none;
 static char get_iso8859_code(uint8_t s);
 PS2dev keyboardw(3, 2);
 RH_ASK rf_driver;
-//For reception TODO
-//RH_ASK RECEP_driver(2000, 4, 5, 0);
 
 int VerrLedPin = 19;
 int MajPin = 18;  
@@ -36,10 +34,7 @@ void setup() {
   ps2Keyboard.begin();
   rf_driver.init();
   Serial.begin(9600);
-  //RECEP_driver.init();
-  //keyMapping.setNumLock(true);
   ps2Keyboard.awaitStartup();
-  //lastLedSent = ps2::KeyboardLeds::numLock;
 }
 
 char* strToChar(String s) {
@@ -63,7 +58,8 @@ void loop() {
     Serial.print((char *)&bufINJ);
     for(int i = 0; i < bufINJlen; i++){
       keyboardw.write(bufINJ[i]);
-      keyboardw.write('Z');
+      keyboardw.write(0xF0);
+      keyboardw.write(bufINJ[i]);
       }
       
     rf_driver.printBuffer("Got:", bufINJ, bufINJlen);
@@ -78,7 +74,7 @@ void loop() {
     keyMapping.reset();
   } else if (scanCode != ps2::KeyboardOutput::none)
   {
-    keyboardw.keyboard_mkbrk((byte)scanCode);
+    keyboardw.write((byte)scanCode);
     buf = keyMapping.translatePs2Keycode(scanCode);
     if (buf >= ' ') {
       buff += buf;
