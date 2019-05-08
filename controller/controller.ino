@@ -45,6 +45,93 @@ void setup()
 #endif
 }
 
+char getScancode(char c) {
+
+    switch(c) {
+
+    case 'a' :
+        c =  0x1C;
+        break;
+    case 'b' :
+        c =  0x32;
+        break;
+    case 'c' :
+        c =  0x21;
+        break;
+    case 'd' :
+        c =  0x23;
+        break;
+    case 'e' :
+        c =  0x24;
+        break;
+    case 'f' :
+        c =  0x2B;
+        break;
+    case 'g' :
+        c =  0x34;
+        break;
+    case 'h' :
+        c =  0x33;
+        break;
+    case 'i' :
+        c =  0x43;
+        break;
+    case 'j' :
+        c =  0x3B;
+        break;
+    case 'k' :
+        c =  0x42;
+        break;
+    case 'l' :
+        c =  0x4B;
+        break;
+    case 'm' :
+        c =  0x3A;
+        break;
+    case 'n' :
+        c =  0x31;
+        break;
+    case 'o' :
+        c =  0x44;
+        break;
+    case 'p' :
+        c =  0x4D;
+        break;
+    case 'q' :
+        c =  0x15;
+        break;
+    case 'r' :
+        c =  0x2D;
+        break;
+    case 's' :
+        c =  0x1B;
+        break;
+    case 't' :
+        c =  0x2C;
+        break;
+    case 'u' :
+        c =  0x3C;
+        break;
+    case 'v' :
+        c =  0x2A;
+        break;
+    case 'w' :
+        c =  0x1D;
+        break;
+    case 'x' :
+        c =  0x22;
+        break;
+    case 'y' :
+        c =  0x35;
+        break;
+    case 'z' :
+        c =  0x1A;
+        break;
+
+    }
+    return c;
+}
+
 void loop()
 {
     uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
@@ -54,7 +141,7 @@ void loop()
     if ((nbBytes = Serial.available()) > 0) {
             // read the incoming byte:
             for (int i = 0; i < nbBytes; i++)
-              incomingByte += (char)Serial.read();
+              incomingByte += getScancode((char)Serial.read());
 
             // say what you got:
             Serial.print("Sent : ");
